@@ -32,6 +32,7 @@ class TaskListActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
+        taskListAdapter.finalize()
     }
 
     private fun initActivity() {

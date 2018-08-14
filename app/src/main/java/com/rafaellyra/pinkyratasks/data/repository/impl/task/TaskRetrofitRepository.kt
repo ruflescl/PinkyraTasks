@@ -2,14 +2,14 @@ package com.rafaellyra.pinkyratasks.data.repository.impl.task
 
 import com.rafaellyra.pinkyratasks.data.model.TaskModel
 import com.rafaellyra.pinkyratasks.data.repository.api.IBaseRepository
-import com.rafaellyra.pinkyratasks.retrofit.task.*
+import com.rafaellyra.pinkyratasks.data.repository.impl.task.exception.TaskDeleteException
+import com.rafaellyra.pinkyratasks.data.repository.impl.task.exception.TaskFetchException
+import com.rafaellyra.pinkyratasks.data.repository.impl.task.exception.TaskPersistException
+import com.rafaellyra.pinkyratasks.retrofit.task.TaskRetrofitService
 import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskDeleteEvent
 import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskFailureEvent
 import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskFetchEvent
 import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskPersistEvent
-import com.rafaellyra.pinkyratasks.data.repository.impl.task.exception.TaskDeleteException
-import com.rafaellyra.pinkyratasks.data.repository.impl.task.exception.TaskFetchException
-import com.rafaellyra.pinkyratasks.data.repository.impl.task.exception.TaskPersistException
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,7 +18,7 @@ import retrofit2.Retrofit
 
 class TaskRetrofitRepository(private val retrofitConfig: Retrofit): IBaseRepository<TaskModel> {
 
-    private val taskService: TaskRetrofitService = retrofitConfig.create(TaskRetrofitService::class.java)
+    private val taskService = retrofitConfig.create(TaskRetrofitService::class.java)
 
     private fun createFetchResponseHandler(): Callback<List<TaskModel>> {
         return object: Callback<List<TaskModel>> {

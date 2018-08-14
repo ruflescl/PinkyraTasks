@@ -1,3 +1,3 @@
 package com.rafaellyra.pinkyratasks.retrofit.task.event
 
-class TaskDeleteEvent(val id: Long)
+data class TaskDeleteEvent(val id: Long)

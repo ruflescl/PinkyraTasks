@@ -17,6 +17,19 @@
         >
 
         <TextView
+            android:id="@+id/text_task_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Username" />
+
+        <TextView
             android:id="@+id/text_task_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -25,9 +38,9 @@
             android:maxLines="2"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_task_username"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="Titulo"
             />
 
@@ -37,8 +50,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="3"
-            android:textSize="12sp"
-            android:textStyle="italic"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_task_title"
