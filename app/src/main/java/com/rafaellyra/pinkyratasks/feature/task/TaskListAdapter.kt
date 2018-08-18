@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.rafaellyra.pinkyratasks.R
 import com.rafaellyra.pinkyratasks.data.model.TaskModel
-import com.rafaellyra.pinkyratasks.data.repository.impl.user.UserRetrofitRepository
+import com.rafaellyra.pinkyratasks.data.repository.impl.user.UserRetrofitApi
 import com.rafaellyra.pinkyratasks.retrofit.base.RetrofitConfig
 import com.rafaellyra.pinkyratasks.retrofit.user.event.UserFetchEvent
 import kotlinx.android.synthetic.main.task_list_item.view.*
@@ -16,7 +16,7 @@ import org.greenrobot.eventbus.ThreadMode
 
 class TaskListAdapter(private var tasks: List<TaskModel> = ArrayList<TaskModel>()): RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
 
-    val userRepository = UserRetrofitRepository(RetrofitConfig().init())
+    val userRepository = UserRetrofitApi(RetrofitConfig().init())
 
     init {
         EventBus.getDefault().register(this)

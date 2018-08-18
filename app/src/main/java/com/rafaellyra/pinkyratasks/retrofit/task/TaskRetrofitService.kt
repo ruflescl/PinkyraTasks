@@ -5,14 +5,17 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface TaskRetrofitService {
-    @GET("todos")
-    fun listAll(): Call<List<TaskModel>>
+    @GET("todos?userId={userId}")
+    fun listAll(@Query("userId") userId: Long): Call<List<TaskModel>>
 
     @GET("todos/{id}")
-    fun getById(@Path("id") id: Long): Call<List<TaskModel>>
+    fun getById(@Path("id") id: Long): Call<TaskModel>
 
     @PUT("todos")
-    fun updateOrCreate(@Body task: TaskModel): Call<TaskModel>
+    fun update(@Body task: TaskModel): Call<TaskModel>
+
+    @POST("todos")
+    fun create(@Body task: TaskModel): Call<TaskModel>
 
     @DELETE("todos/{id}")
     fun delete(@Path("id") id: Long): Call<Void>

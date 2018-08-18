@@ -1,7 +1,5 @@
 package com.rafaellyra.pinkyratasks.data.model
 
-import com.rafaellyra.pinkyratasks.data.repository.api.IBaseEntity
-
 data class UserModel(val id: Long,
                      val name: String,
                      val username: String,
@@ -9,8 +7,6 @@ data class UserModel(val id: Long,
                      val address: AddressModel,
                      val phone: String,
                      val website: String,
-                     val company: CompanyModel): IBaseEntity {
-    override fun id(): Long {
-        return id
-    }
+                     val company: CompanyModel,
+                     var tasks: List<TaskModel> = ArrayList<TaskModel>()){
 }

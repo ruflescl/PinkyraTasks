@@ -6,14 +6,8 @@ import retrofit2.http.*
 
 interface UserRetrofitService {
     @GET("users")
-    fun listAll(): Call<List<UserModel>>
+    fun getByEmail(@Query("email") email: String): Call<UserModel>
 
-    @GET("users/{id}")
-    fun getById(@Path("id") id: Long): Call<UserModel>
-
-    @PUT("users")
-    fun updateOrCreate(@Body item: UserModel): Call<UserModel>
-
-    @DELETE("users/{id}")
-    fun delete(@Path("id") id: Long): Call<Void>
+    @POST("users")
+    fun create(@Body item: UserModel): Call<UserModel>
 }

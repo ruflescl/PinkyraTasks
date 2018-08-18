@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.rafaellyra.pinkyratasks.R
-import com.rafaellyra.pinkyratasks.data.repository.impl.task.TaskRetrofitRepository
+import com.rafaellyra.pinkyratasks.data.repository.impl.task.TaskRetrofitApi
 import com.rafaellyra.pinkyratasks.data.repository.impl.task.exception.TaskFetchException
 import com.rafaellyra.pinkyratasks.retrofit.base.RetrofitConfig
 import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskFetchEvent
@@ -37,7 +37,7 @@ class TaskListActivity : AppCompatActivity() {
 
     private fun initActivity() {
         EventBus.getDefault().register(this)
-        val taskRepo = TaskRetrofitRepository(RetrofitConfig().init())
+        val taskRepo = TaskRetrofitApi(RetrofitConfig().init())
         taskRepo.list()
     }
 

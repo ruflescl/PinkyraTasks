@@ -1,10 +1,12 @@
 package com.rafaellyra.pinkyratasks.data.repository.impl.user
 
 import com.rafaellyra.pinkyratasks.data.model.UserModel
-import com.rafaellyra.pinkyratasks.data.repository.api.IBaseRepository
+import com.rafaellyra.pinkyratasks.data.repository.api.task.TaskApi
+import com.rafaellyra.pinkyratasks.data.repository.api.user.UserApi
 import com.rafaellyra.pinkyratasks.data.repository.impl.user.exception.UserDeleteException
 import com.rafaellyra.pinkyratasks.data.repository.impl.user.exception.UserFetchException
 import com.rafaellyra.pinkyratasks.data.repository.impl.user.exception.UserPersistException
+import com.rafaellyra.pinkyratasks.retrofit.base.RetrofitResponseHandlerBase
 import com.rafaellyra.pinkyratasks.retrofit.user.UserRetrofitService
 import com.rafaellyra.pinkyratasks.retrofit.user.event.UserDeleteEvent
 import com.rafaellyra.pinkyratasks.retrofit.user.event.UserFailureEvent
@@ -16,10 +18,20 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 
-class UserRetrofitRepository(private val retrofitConfig: Retrofit): IBaseRepository<UserModel> {
+class UserRetrofitApi(private val retrofitConfig: Retrofit): RetrofitResponseHandlerBase<UserModel>(),
+        UserApi {
+
     private val userService = retrofitConfig.create(UserRetrofitService::class.java)
 
-    private fun createSingleFetchResponseHandler(adapterPosition: Int = -1): Callback<UserModel> {
+    override fun getUserWithEmailAndPassword(email: String, password: String) {
+        userService.getByEmail(email).enqueue(createSingleFetchResponseHandler())
+    }
+
+    override fun createUser(userModel: UserModel) {
+        userService.create(userModel).enqueue(createSingleFetchResponseHandler())
+    }
+
+    override fun createSingleFetchResponseHandler(adapterPosition: Int): Callback<UserModel> {
         return object: Callback<UserModel> {
             override fun onFailure(call: Call<UserModel>?, t: Throwable?) {
                 EventBus.getDefault().post(UserFailureEvent(UserFetchException(t)))
@@ -38,7 +50,7 @@ class UserRetrofitRepository(private val retrofitConfig: Retrofit): IBaseReposit
         }
     }
 
-    private fun createListFetchResponseHandler(): Callback<List<UserModel>> {
+    override fun createListFetchResponseHandler(): Callback<List<UserModel>> {
         return object: Callback<List<UserModel>> {
             override fun onFailure(call: Call<List<UserModel>>?, t: Throwable?) {
                 EventBus.getDefault().post(UserFailureEvent(UserFetchException(t)))
@@ -50,7 +62,7 @@ class UserRetrofitRepository(private val retrofitConfig: Retrofit): IBaseReposit
         }
     }
 
-    private fun createPersistResponseHandler(): Callback<UserModel> {
+    override fun createPersistResponseHandler(): Callback<UserModel> {
         return object : Callback<UserModel> {
             override fun onFailure(call: Call<UserModel>?, t: Throwable?) {
                 EventBus.getDefault().post(UserFailureEvent(UserPersistException(t)))
@@ -62,7 +74,7 @@ class UserRetrofitRepository(private val retrofitConfig: Retrofit): IBaseReposit
         }
     }
 
-    private fun createDeleteResponseHandler(id: Long): Callback<Void> {
+    override fun createDeleteResponseHandler(id: Long): Callback<Void> {
         return object : Callback<Void> {
             override fun onFailure(call: Call<Void>?, t: Throwable?) {
                 EventBus.getDefault().post(UserFailureEvent(UserDeleteException(t)))
@@ -72,25 +84,5 @@ class UserRetrofitRepository(private val retrofitConfig: Retrofit): IBaseReposit
                 EventBus.getDefault().post(UserDeleteEvent(id))
             }
         }
-    }
-
-    fun getForAdapterPosition(id: Long, adapterPosition: Int) {
-        userService.getById(id).enqueue(createSingleFetchResponseHandler(adapterPosition))
-    }
-
-    override fun get(id: Long) {
-        userService.getById(id).enqueue(createSingleFetchResponseHandler())
-    }
-
-    override fun list() {
-        userService.listAll().enqueue(createListFetchResponseHandler())
-    }
-
-    override fun persist(item: UserModel) {
-        userService.updateOrCreate(item).enqueue(createPersistResponseHandler())
-    }
-
-    override fun delete(id: Long) {
-        userService.delete(id).enqueue(createDeleteResponseHandler(id))
     }
 }
