@@ -3,63 +3,57 @@ package com.rafaellyra.pinkyratasks.data.repository.impl.task
 import com.rafaellyra.pinkyratasks.data.model.TaskModel
 import com.rafaellyra.pinkyratasks.data.model.UserModel
 import com.rafaellyra.pinkyratasks.data.repository.api.task.TaskApi
-import com.rafaellyra.pinkyratasks.eventbus.base.AppEventBus
 import com.rafaellyra.pinkyratasks.eventbus.task.exception.TaskDeleteException
 import com.rafaellyra.pinkyratasks.eventbus.task.exception.TaskFetchException
 import com.rafaellyra.pinkyratasks.eventbus.task.exception.TaskPersistException
-import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskDeleteEvent
-import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskFailureEvent
-import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskFetchEvent
-import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskPersistEvent
 import com.rafaellyra.pinkyratasks.room.dao.task.TaskDao
 
 class TaskDatabaseApi(val taskDao: TaskDao) : TaskApi {
-    override fun getTask(id: Long) {
+    override fun getTask(id: Long): TaskModel? {
         try {
-            AppEventBus.repository.post(TaskFetchEvent(listOf(taskDao.get(id))))
+            return taskDao.get(id)
         }
         catch (e: Exception) {
-            AppEventBus.repository.post(TaskFailureEvent(TaskFetchException(e)))
+            throw TaskFetchException(e)
         }
     }
 
-    override fun getTasksFromUser(userModel: UserModel) {
+    override fun getTasksFromUser(userModel: UserModel): List<TaskModel>? {
         try {
-            AppEventBus.repository.post(TaskFetchEvent(taskDao.getTasksFromUser(userModel.id)))
+            return taskDao.getTasksFromUser(userModel.id)
         }
         catch (e: Exception) {
-            AppEventBus.repository.post(TaskFailureEvent(TaskFetchException(e)))
+            throw TaskFetchException(e)
         }
     }
 
-    override fun createTask(taskModel: TaskModel) {
+    override fun createTask(taskModel: TaskModel): TaskModel? {
         try {
             val id = taskDao.insert(taskModel)
-            val insertedTask = taskDao.get(id)
-            AppEventBus.repository.post(TaskPersistEvent(insertedTask))
+            return taskDao.get(id)
         }
         catch (e: Exception) {
-            AppEventBus.repository.post(TaskFailureEvent(TaskPersistException(e)))
+            throw TaskPersistException(e)
         }
     }
 
-    override fun updateTask(taskModel: TaskModel) {
+    override fun updateTask(taskModel: TaskModel): TaskModel {
         try {
             taskDao.update(taskModel)
-            AppEventBus.repository.post(TaskPersistEvent(taskModel))
+            return taskModel
         }
         catch (e: Exception) {
-            AppEventBus.repository.post(TaskFailureEvent(TaskPersistException(e)))
+            throw TaskPersistException(e)
         }
     }
 
-    override fun deleteTask(taskModel: TaskModel) {
+    override fun deleteTask(taskModel: TaskModel): Long {
         try {
             taskDao.delete(taskModel)
-            AppEventBus.repository.post(TaskDeleteEvent(taskModel.id))
+            return taskModel.id
         }
         catch (e: Exception) {
-            AppEventBus.repository.post(TaskFailureEvent(TaskDeleteException(e)))
+            throw TaskDeleteException(e)
         }
     }
 }

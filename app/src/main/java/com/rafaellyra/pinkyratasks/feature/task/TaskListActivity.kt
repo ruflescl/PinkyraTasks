@@ -10,7 +10,7 @@ import com.rafaellyra.pinkyratasks.R
 import com.rafaellyra.pinkyratasks.data.repository.impl.task.TaskRetrofitApi
 import com.rafaellyra.pinkyratasks.eventbus.task.exception.TaskFetchException
 import com.rafaellyra.pinkyratasks.retrofit.base.RetrofitConfig
-import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskFetchEvent
+import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskListFetchEvent
 import kotlinx.android.synthetic.main.activity_task_list.*
 import kotlinx.android.synthetic.main.content_task_list.*
 import org.greenrobot.eventbus.EventBus
@@ -68,7 +68,7 @@ class TaskListActivity : AppCompatActivity() {
     }
 
     @Subscribe
-    fun onTaskFetch(event: TaskFetchEvent){
+    fun onTaskFetch(event: TaskListFetchEvent){
         taskListAdapter.changeDataset(event.data)
     }
 

@@ -2,32 +2,27 @@ package com.rafaellyra.pinkyratasks.data.repository.impl.user
 
 import com.rafaellyra.pinkyratasks.data.model.UserModel
 import com.rafaellyra.pinkyratasks.data.repository.api.user.UserApi
-import com.rafaellyra.pinkyratasks.eventbus.base.AppEventBus
 import com.rafaellyra.pinkyratasks.eventbus.user.exception.UserFetchException
 import com.rafaellyra.pinkyratasks.eventbus.user.exception.UserPersistException
-import com.rafaellyra.pinkyratasks.retrofit.user.event.UserFailureEvent
-import com.rafaellyra.pinkyratasks.retrofit.user.event.UserFetchEvent
-import com.rafaellyra.pinkyratasks.retrofit.user.event.UserPersistEvent
 import com.rafaellyra.pinkyratasks.room.dao.user.UserDao
 
 class UserDatabaseApi(val userDao: UserDao) : UserApi {
-    override fun getUserWithEmail(email: String) {
+    override fun getUserWithEmail(email: String): UserModel? {
         try {
-            AppEventBus.repository.post(UserFetchEvent(userDao.getWithEmail(email)))
+            return userDao.getWithEmail(email)
         }
         catch (e: Exception) {
-            AppEventBus.repository.post(UserFailureEvent(UserFetchException(e)))
+            throw UserFetchException(e)
         }
     }
 
-    override fun createUser(userModel: UserModel) {
+    override fun createUser(userModel: UserModel): UserModel {
         try {
-            userDao.insert(userModel)
-            val insertedUser = userDao.getWithEmail(userModel.email)
-            AppEventBus.repository.post(UserPersistEvent(insertedUser))
+            val id: Long = userDao.insert(userModel)
+            return userDao.get(id)
         }
         catch (e: Exception) {
-            AppEventBus.repository.post(UserFailureEvent(UserPersistException(e)))
+            throw UserPersistException(e)
         }
     }
 }

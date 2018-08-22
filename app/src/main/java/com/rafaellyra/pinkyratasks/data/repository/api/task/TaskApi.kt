@@ -4,9 +4,9 @@ import com.rafaellyra.pinkyratasks.data.model.TaskModel
 import com.rafaellyra.pinkyratasks.data.model.UserModel
 
 interface TaskApi {
-    fun getTask(id: Long)
-    fun getTasksFromUser(userModel: UserModel)
-    fun createTask(taskModel: TaskModel)
-    fun updateTask(taskModel: TaskModel)
-    fun deleteTask(taskModel: TaskModel)
+    fun getTask(id: Long): TaskModel?
+    fun getTasksFromUser(userModel: UserModel): List<TaskModel>?
+    fun createTask(taskModel: TaskModel): TaskModel?
+    fun updateTask(taskModel: TaskModel): TaskModel
+    fun deleteTask(taskModel: TaskModel): Long
 }
