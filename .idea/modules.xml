@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PinkyraTasks.iml" filepath="$PROJECT_DIR$/PinkyraTasks.iml" />
-      <module fileurl="file://C:\Users\rafaelcintra\Documents\GitHub\PinkyraTasks\PinkyraTasks.iml" filepath="C:\Users\rafaelcintra\Documents\GitHub\PinkyraTasks\PinkyraTasks.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\rafaelcintra\Documents\GitHub\PinkyraTasks\app\app.iml" filepath="C:\Users\rafaelcintra\Documents\GitHub\PinkyraTasks\app\app.iml" />
     </modules>
   </component>
 </project>

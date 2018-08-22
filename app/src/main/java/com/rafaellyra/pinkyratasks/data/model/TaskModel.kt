@@ -1,8 +1,19 @@
 package com.rafaellyra.pinkyratasks.data.model
 
-class TaskModel(
-        val id: Long,
-        val userId: Long,
-        val title: String,
-        val completed: Boolean = false){
-}
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.PrimaryKey
+import android.support.annotation.NonNull
+
+@Entity(tableName = "Task",
+        foreignKeys =
+            arrayOf(
+                    ForeignKey(entity = UserModel::class,
+                            parentColumns = arrayOf("id"),
+                            childColumns = arrayOf("userId"),
+                            onDelete = ForeignKey.CASCADE)))
+data class TaskModel(
+        @PrimaryKey(autoGenerate = true) val id: Long,
+        @NonNull val userId: Long,
+        @NonNull val title: String,
+        @NonNull val completed: Boolean = false)

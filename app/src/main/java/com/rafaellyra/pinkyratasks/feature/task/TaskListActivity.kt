@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.rafaellyra.pinkyratasks.R
 import com.rafaellyra.pinkyratasks.data.repository.impl.task.TaskRetrofitApi
-import com.rafaellyra.pinkyratasks.data.repository.impl.task.exception.TaskFetchException
+import com.rafaellyra.pinkyratasks.eventbus.task.exception.TaskFetchException
 import com.rafaellyra.pinkyratasks.retrofit.base.RetrofitConfig
 import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskFetchEvent
 import kotlinx.android.synthetic.main.activity_task_list.*

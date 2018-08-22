@@ -1,12 +1,13 @@
 package com.rafaellyra.pinkyratasks.data.model
 
-data class UserModel(val id: Long,
-                     val name: String,
-                     val username: String,
-                     val email: String,
-                     val address: AddressModel,
-                     val phone: String,
-                     val website: String,
-                     val company: CompanyModel,
-                     var tasks: List<TaskModel> = ArrayList<TaskModel>()){
-}
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
+import android.arch.persistence.room.PrimaryKey
+import android.support.annotation.NonNull
+
+@Entity(tableName = "User", indices = arrayOf(
+        Index(value="email", unique = true)))
+data class UserModel(@PrimaryKey(autoGenerate = true) val id: Long,
+                     @NonNull val name: String,
+                     @NonNull val username: String,
+                     @NonNull val email: String)
