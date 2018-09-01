@@ -1,6 +1,5 @@
 package com.rafaellyra.pinkyratasks.retrofit.base
 
-import com.rafaellyra.pinkyratasks.retrofit.base.RetrofitConfig.Constants.HTTP_BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -11,7 +10,7 @@ class RetrofitConfig {
 
     fun init() : Retrofit {
         return Retrofit.Builder()
-                .baseUrl(HTTP_BASE_URL)
+                .baseUrl(Constants.HTTP_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
     }

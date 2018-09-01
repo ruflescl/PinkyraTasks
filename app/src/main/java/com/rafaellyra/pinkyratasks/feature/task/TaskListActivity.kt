@@ -7,18 +7,20 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.rafaellyra.pinkyratasks.R
+import com.rafaellyra.pinkyratasks.data.model.UserModel
 import com.rafaellyra.pinkyratasks.data.repository.impl.task.TaskRetrofitApi
+import com.rafaellyra.pinkyratasks.eventbus.task.event.TaskListFetchEvent
 import com.rafaellyra.pinkyratasks.eventbus.task.exception.TaskFetchException
 import com.rafaellyra.pinkyratasks.retrofit.base.RetrofitConfig
-import com.rafaellyra.pinkyratasks.retrofit.task.event.TaskListFetchEvent
 import kotlinx.android.synthetic.main.activity_task_list.*
 import kotlinx.android.synthetic.main.content_task_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class TaskListActivity : AppCompatActivity() {
 
-    val taskListAdapter: TaskListAdapter = TaskListAdapter()
+    private val taskListAdapter: TaskListAdapter = TaskListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,13 +34,13 @@ class TaskListActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
-        taskListAdapter.finalize()
     }
 
     private fun initActivity() {
         EventBus.getDefault().register(this)
         val taskRepo = TaskRetrofitApi(RetrofitConfig().init())
-        taskRepo.list()
+
+        taskRepo.getTasksFromUser(UserModel(1, "", "", "Sincere@april.biz"))
     }
 
     private fun setupViews() {
@@ -67,13 +69,13 @@ class TaskListActivity : AppCompatActivity() {
         }
     }
 
-    @Subscribe
-    fun onTaskFetch(event: TaskListFetchEvent){
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTaskFetch(event: TaskListFetchEvent) {
         taskListAdapter.changeDataset(event.data)
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTaskFetchFail(error: TaskFetchException) {
-        Snackbar.make(root, error.message ?: "Erro desconhecido" , Snackbar.LENGTH_LONG).show()
+        Snackbar.make(root, error.message ?: "Erro desconhecido", Snackbar.LENGTH_LONG).show()
     }
 }

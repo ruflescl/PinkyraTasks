@@ -10,7 +10,7 @@ import com.rafaellyra.pinkyratasks.retrofit.base.RetrofitResponseHandlerBase
 import com.rafaellyra.pinkyratasks.retrofit.task.TaskRetrofitService
 import retrofit2.Retrofit
 
-class TaskRetrofitApi(private val retrofitConfig: Retrofit):
+class TaskRetrofitApi(retrofitConfig: Retrofit):
         RetrofitResponseHandlerBase<TaskModel>(),
         TaskApi {
 

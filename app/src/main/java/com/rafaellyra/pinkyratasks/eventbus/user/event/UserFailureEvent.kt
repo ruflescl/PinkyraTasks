@@ -1,3 +1,3 @@
-package com.rafaellyra.pinkyratasks.retrofit.user.event
+package com.rafaellyra.pinkyratasks.eventbus.user.event
 
 data class UserFailureEvent(val exception: Throwable)

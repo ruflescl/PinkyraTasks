@@ -6,7 +6,7 @@ import com.rafaellyra.pinkyratasks.eventbus.user.exception.UserFetchException
 import com.rafaellyra.pinkyratasks.eventbus.user.exception.UserPersistException
 import com.rafaellyra.pinkyratasks.room.dao.user.UserDao
 
-class UserDatabaseApi(val userDao: UserDao) : UserApi {
+class UserDatabaseApi(private val userDao: UserDao) : UserApi {
     override fun getUserWithEmail(email: String): UserModel? {
         try {
             return userDao.getWithEmail(email)

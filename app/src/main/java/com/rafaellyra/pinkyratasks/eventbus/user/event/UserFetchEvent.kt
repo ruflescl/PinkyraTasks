@@ -1,4 +1,4 @@
-package com.rafaellyra.pinkyratasks.retrofit.user.event
+package com.rafaellyra.pinkyratasks.eventbus.user.event
 
 import com.rafaellyra.pinkyratasks.data.model.UserModel
 

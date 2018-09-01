@@ -5,7 +5,7 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface TaskRetrofitService {
-    @GET("todos?userId={userId}")
+    @GET("todos")
     fun listAll(@Query("userId") userId: Long): Call<List<TaskModel>>
 
     @GET("todos/{id}")

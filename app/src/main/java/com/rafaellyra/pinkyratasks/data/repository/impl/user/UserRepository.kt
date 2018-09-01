@@ -1,18 +1,20 @@
 package com.rafaellyra.pinkyratasks.data.repository.impl.user
 
 import com.rafaellyra.pinkyratasks.data.model.UserModel
-import com.rafaellyra.pinkyratasks.eventbus.user.UserAuthenticationFailEvent
-import com.rafaellyra.pinkyratasks.eventbus.user.UserAuthenticationSuccessEvent
+import com.rafaellyra.pinkyratasks.eventbus.user.event.UserAuthenticationFailEvent
+import com.rafaellyra.pinkyratasks.eventbus.user.event.UserAuthenticationSuccessEvent
 import com.rafaellyra.pinkyratasks.eventbus.user.exception.UserCreationEmptyDataException
 import com.rafaellyra.pinkyratasks.eventbus.user.exception.UserFetchException
 import com.rafaellyra.pinkyratasks.eventbus.user.exception.UserFetchNoDataException
 import com.rafaellyra.pinkyratasks.eventbus.user.exception.UserPersistException
-import com.rafaellyra.pinkyratasks.retrofit.user.event.UserFailureEvent
-import com.rafaellyra.pinkyratasks.retrofit.user.event.UserPersistEvent
+import com.rafaellyra.pinkyratasks.eventbus.user.event.UserFailureEvent
+import com.rafaellyra.pinkyratasks.eventbus.user.event.UserPersistEvent
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import org.greenrobot.eventbus.EventBus
 
 class UserRepository(private val databaseApi: UserDatabaseApi, private val retrofitApi: UserRetrofitApi) {
-    fun authenticate(email: String) {
+    fun authenticate(email: String) = async(CommonPool) {
         var result: UserModel?
 
         try {
@@ -25,19 +27,18 @@ class UserRepository(private val databaseApi: UserDatabaseApi, private val retro
                     databaseApi.createUser(result)
                 }
             }
+
+            when (result) {
+                null -> EventBus.getDefault().post(UserAuthenticationFailEvent(UserFetchNoDataException()))
+                else -> EventBus.getDefault().post(UserAuthenticationSuccessEvent(result))
+            }
         }
         catch (e: UserFetchException) {
             EventBus.getDefault().post(UserAuthenticationFailEvent(e))
-            return
-        }
-
-        when (result) {
-            null -> EventBus.getDefault().post(UserAuthenticationFailEvent(UserFetchNoDataException()))
-            else -> EventBus.getDefault().post(UserAuthenticationSuccessEvent(result))
         }
     }
 
-    fun createUser(userModel: UserModel) {
+    fun createUser(userModel: UserModel) = async(CommonPool) {
         val result: UserModel?
 
         try {
@@ -47,12 +48,11 @@ class UserRepository(private val databaseApi: UserDatabaseApi, private val retro
                 null -> throw UserPersistException(UserCreationEmptyDataException())
                 else -> databaseApi.createUser(result)
             }
+
+            EventBus.getDefault().post(UserPersistEvent(result))
         }
         catch (e: UserPersistException) {
             EventBus.getDefault().post(UserFailureEvent(e))
-            return
         }
-
-        EventBus.getDefault().post(UserPersistEvent(result))
     }
 }

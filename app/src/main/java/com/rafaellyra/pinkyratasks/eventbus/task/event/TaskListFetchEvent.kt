@@ -1,4 +1,4 @@
-package com.rafaellyra.pinkyratasks.retrofit.task.event
+package com.rafaellyra.pinkyratasks.eventbus.task.event
 
 import com.rafaellyra.pinkyratasks.data.model.TaskModel
 

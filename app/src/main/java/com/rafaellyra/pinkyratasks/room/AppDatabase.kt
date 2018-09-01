@@ -4,11 +4,12 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import com.rafaellyra.pinkyratasks.data.model.TaskModel
 import com.rafaellyra.pinkyratasks.data.model.UserModel
 import com.rafaellyra.pinkyratasks.room.dao.task.TaskDao
 import com.rafaellyra.pinkyratasks.room.dao.user.UserDao
 
-@Database(entities = arrayOf(UserModel::class), version = 1)
+@Database(entities = arrayOf(UserModel::class, TaskModel::class), version = 1)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun taskDao(): TaskDao
@@ -20,7 +21,7 @@ abstract class AppDatabase: RoomDatabase() {
         fun getInstance(context: Context): AppDatabase? {
             if (INSTANCE == null) {
                 synchronized(AppDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                    INSTANCE = Room.databaseBuilder(context.applicationContext,
                             AppDatabase::class.java, DATABASE_NAME)
                             .build()
                 }

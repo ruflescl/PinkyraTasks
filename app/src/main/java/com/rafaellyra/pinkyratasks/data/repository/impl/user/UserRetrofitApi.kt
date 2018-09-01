@@ -7,7 +7,7 @@ import com.rafaellyra.pinkyratasks.retrofit.base.RetrofitResponseHandlerBase
 import com.rafaellyra.pinkyratasks.retrofit.user.UserRetrofitService
 import retrofit2.Retrofit
 
-class UserRetrofitApi(private val retrofitConfig: Retrofit): RetrofitResponseHandlerBase<UserModel>(),
+class UserRetrofitApi(retrofitConfig: Retrofit): RetrofitResponseHandlerBase<UserModel>(),
         UserApi {
 
     private val userService = retrofitConfig.create(UserRetrofitService::class.java)

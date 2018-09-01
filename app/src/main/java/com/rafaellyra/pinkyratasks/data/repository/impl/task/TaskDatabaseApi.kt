@@ -8,7 +8,7 @@ import com.rafaellyra.pinkyratasks.eventbus.task.exception.TaskFetchException
 import com.rafaellyra.pinkyratasks.eventbus.task.exception.TaskPersistException
 import com.rafaellyra.pinkyratasks.room.dao.task.TaskDao
 
-class TaskDatabaseApi(val taskDao: TaskDao) : TaskApi {
+class TaskDatabaseApi(private val taskDao: TaskDao) : TaskApi {
     override fun getTask(id: Long): TaskModel? {
         try {
             return taskDao.get(id)
